@@ -32,16 +32,21 @@ class _HomeViewState extends State<HomeView> {
     final viewModel = context.read<CharacterListViewModel>();
 
     _searchController.addListener(() {
-      if (_searchController.text.isEmpty) {
-        viewModel.loadCharacters();
+      final text = _searchController.text;
+      if (text.isEmpty) {
+        viewModel.loadCharacters(query: '', loadMore: false);
       }
     });
 
     _characterScrollController.addListener(() {
-      if (_characterScrollController.position.pixels >=
-              _characterScrollController.position.maxScrollExtent - 300 &&
-          viewModel.hasMore) {
-        viewModel.loadCharacters(loadMore: true);
+      final vm = context.read<CharacterListViewModel>();
+      final query = _searchController.text;
+
+      if (!vm.isSearchEmpty &&
+          vm.hasMore &&
+          _characterScrollController.position.pixels >=
+              _characterScrollController.position.maxScrollExtent - 300) {
+        vm.loadCharacters(query: query, loadMore: true);
       }
     });
 
@@ -74,7 +79,10 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _onSearch(String query) {
-    context.read<CharacterListViewModel>().loadCharacters(query: query);
+    context.read<CharacterListViewModel>().loadCharacters(
+      query: query,
+      loadMore: false,
+    );
   }
 
   @override
@@ -275,17 +283,16 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
             ),
-            if (characterVM.characters.isNotEmpty &&
-                _searchController.text.isEmpty)
-              SliverToBoxAdapter(
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 16.0, top: 16.0),
-                  child: Text(
-                    'Personagens',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+
+            SliverToBoxAdapter(
+              child: const Padding(
+                padding: EdgeInsets.only(left: 16.0, top: 16.0),
+                child: Text(
+                  'Personagens',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
+            ),
             if (characterVM.characters.isEmpty &&
                 _searchController.text.isNotEmpty)
               SliverFillRemaining(
