@@ -18,17 +18,17 @@ final getIt = GetIt.instance;
 void setupDependencies() {
   // Clients
   getIt.registerLazySingleton<Dio>(
-      () => Dio(
-        BaseOptions(
-          baseUrl: 'https://rickandmortyapi.com/api',
-          connectTimeout:
-              Duration(milliseconds: 30000),
-          receiveTimeout:
-              Duration(milliseconds: 30000),
-        ),
+    () => Dio(
+      BaseOptions(
+        baseUrl: 'https://rickandmortyapi.com/api',
+        connectTimeout: Duration(milliseconds: 30000),
+        receiveTimeout: Duration(milliseconds: 30000),
       ),
-    );
-  getIt.registerLazySingleton<IRestClient>(() => RestClientDioImpl(dio: getIt<Dio>()));
+    ),
+  );
+  getIt.registerLazySingleton<IRestClient>(
+    () => RestClientDioImpl(dio: getIt<Dio>()),
+  );
 
   // DataSources
   getIt.registerLazySingleton(() => RamRemoteDatasource(getIt()));

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  
   setupDependencies();
   runApp(const AppWidget());
 }

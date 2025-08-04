@@ -5,7 +5,10 @@ class GetLocationsUseCase {
   final IRamRepository repository;
   GetLocationsUseCase(this.repository);
 
-  Future<List<LocationEntity>> call({int page = 1, Map<String, String>? filters}) {
+  Future<List<LocationEntity>> call({
+    int page = 1,
+    Map<String, String>? filters,
+  }) {
     return repository.getLocations(page: page, filters: filters);
   }
 }

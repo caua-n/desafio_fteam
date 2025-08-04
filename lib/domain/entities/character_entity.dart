@@ -1,4 +1,3 @@
-
 import 'package:desafio_fteam/domain/entities/character_location_entity.dart';
 import 'package:desafio_fteam/domain/enums/character_especies_enum.dart';
 import 'package:desafio_fteam/domain/enums/character_genders_enum.dart';

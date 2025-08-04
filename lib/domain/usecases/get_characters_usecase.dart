@@ -5,7 +5,10 @@ class GetCharactersUseCase {
   final IRamRepository repository;
   GetCharactersUseCase(this.repository);
 
-  Future<List<CharacterEntity>> call({int page = 1, Map<String, String>? filters}) {
+  Future<List<CharacterEntity>> call({
+    int page = 1,
+    Map<String, String>? filters,
+  }) {
     return repository.getCharacters(page: page, filters: filters);
   }
 }

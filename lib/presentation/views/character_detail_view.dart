@@ -14,21 +14,25 @@ class CharacterDetailView extends StatelessWidget {
       body: viewModel.isLoading
           ? const Center(child: CircularProgressIndicator())
           : viewModel.character == null
-              ? const Center(child: Text('Personagem não encontrado.'))
-              : Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(viewModel.character!.name, style: Theme.of(context).textTheme.headlineMedium),
-                      const SizedBox(height: 8),
-                      Text('Status: ${viewModel.character!.status.name}'),
-                      Text('Espécie: ${viewModel.character!.species.name}'),
-                      Text('Gênero: ${viewModel.character!.gender.name}'),
-                      Text('Origem: ${viewModel.character!.origin.name}'),
-                    ],
+          ? const Center(child: Text('Personagem não encontrado.'))
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.network(viewModel.character!.image),
+                  Text(
+                    viewModel.character!.name,
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  Text('Status: ${viewModel.character!.status.name}'),
+                  Text('Espécie: ${viewModel.character!.species.name}'),
+                  Text('Gênero: ${viewModel.character!.gender.name}'),
+                  Text('Origem: ${viewModel.character!.origin.name}'),
+                ],
+              ),
+            ),
     );
   }
 }

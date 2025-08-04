@@ -1,6 +1,7 @@
 import 'package:desafio_fteam/core/clients/rest/models/rest_client_http_message.dart';
 import 'package:desafio_fteam/core/clients/rest/models/rest_client_response.dart';
 import 'package:desafio_fteam/core/errors/base_exception.dart';
+
 class RestClientException extends BaseException
     implements RestClientHttpMessage {
   dynamic error;

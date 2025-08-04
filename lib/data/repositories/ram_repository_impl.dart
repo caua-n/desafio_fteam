@@ -13,7 +13,10 @@ class RamRepositoryImpl implements IRamRepository {
   RamRepositoryImpl(this.datasource);
 
   @override
-  Future<List<CharacterEntity>> getCharacters({int page = 1, Map<String, String>? filters}) async {
+  Future<List<CharacterEntity>> getCharacters({
+    int page = 1,
+    Map<String, String>? filters,
+  }) async {
     final result = await datasource.getCharacters(page: page, filters: filters);
     return result.map(CharacterAdapter.fromJson).toList();
   }
@@ -25,7 +28,10 @@ class RamRepositoryImpl implements IRamRepository {
   }
 
   @override
-  Future<List<EpisodeEntity>> getEpisodes({int page = 1, Map<String, String>? filters}) async {
+  Future<List<EpisodeEntity>> getEpisodes({
+    int page = 1,
+    Map<String, String>? filters,
+  }) async {
     final result = await datasource.getEpisodes(page: page, filters: filters);
     return result.map(EpisodeAdapter.fromJson).toList();
   }
@@ -37,7 +43,10 @@ class RamRepositoryImpl implements IRamRepository {
   }
 
   @override
-  Future<List<LocationEntity>> getLocations({int page = 1, Map<String, String>? filters}) async {
+  Future<List<LocationEntity>> getLocations({
+    int page = 1,
+    Map<String, String>? filters,
+  }) async {
     final result = await datasource.getLocations(page: page, filters: filters);
     return result.map(LocationAdapter.fromJson).toList();
   }

@@ -1,4 +1,3 @@
-
 import 'package:desafio_fteam/domain/entities/episode_entity.dart';
 
 class EpisodeAdapter {

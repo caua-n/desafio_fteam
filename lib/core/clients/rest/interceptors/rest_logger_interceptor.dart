@@ -8,7 +8,6 @@ import 'package:desafio_fteam/core/clients/rest/models/rest_client_http_message.
 import 'package:desafio_fteam/core/clients/rest/models/rest_client_request.dart';
 import 'package:desafio_fteam/core/clients/rest/models/rest_client_response.dart';
 
-
 const JsonEncoder _encoder = JsonEncoder.withIndent('  ');
 
 class RestLoggerInterceptor implements IRestInterceptor {

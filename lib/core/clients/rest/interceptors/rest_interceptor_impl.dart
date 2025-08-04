@@ -1,5 +1,6 @@
 import 'package:desafio_fteam/core/clients/rest/errors/rest_client_exception.dart';
-import 'package:desafio_fteam/core/clients/rest/i_rest_interceptor.dart' show IRestInterceptor;
+import 'package:desafio_fteam/core/clients/rest/i_rest_interceptor.dart'
+    show IRestInterceptor;
 import 'package:desafio_fteam/core/clients/rest/models/rest_client_request.dart';
 import 'package:desafio_fteam/core/clients/rest/models/rest_client_response.dart';
 import 'package:dio/dio.dart';
@@ -25,7 +26,9 @@ class RestInterceptorImpl implements Interceptor {
 
   @override
   void onRequest(
-      RequestOptions options, RequestInterceptorHandler handler) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     final restRequest = DioAdapter.toClientRequest(options);
     final message = await interceptor.onRequest(restRequest);
 

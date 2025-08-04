@@ -16,5 +16,4 @@ class LocationEntity {
     required this.url,
     required this.created,
   });
-
 }

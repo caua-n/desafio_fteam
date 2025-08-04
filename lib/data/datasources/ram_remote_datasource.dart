@@ -1,13 +1,15 @@
-
 import 'package:desafio_fteam/core/clients/rest/i_rest_client.dart';
 import 'package:desafio_fteam/core/clients/rest/models/rest_client_request.dart';
 
 class RamRemoteDatasource {
   final IRestClient client;
 
-   RamRemoteDatasource(this.client);
+  RamRemoteDatasource(this.client);
 
-  Future<List<Map<String, dynamic>>> getCharacters({int page = 1, Map<String, String>? filters}) async {
+  Future<List<Map<String, dynamic>>> getCharacters({
+    int page = 1,
+    Map<String, String>? filters,
+  }) async {
     final query = {'page': '$page', ...?filters};
     final response = await client.get(
       RestClientRequest(path: '/character', queryParameters: query),
@@ -16,11 +18,16 @@ class RamRemoteDatasource {
   }
 
   Future<Map<String, dynamic>> getCharacterById(int id) async {
-    final response = await client.get(RestClientRequest(path: '/character/$id'));
+    final response = await client.get(
+      RestClientRequest(path: '/character/$id'),
+    );
     return Map<String, dynamic>.from(response.data);
   }
 
-  Future<List<Map<String, dynamic>>> getEpisodes({int page = 1, Map<String, String>? filters}) async {
+  Future<List<Map<String, dynamic>>> getEpisodes({
+    int page = 1,
+    Map<String, String>? filters,
+  }) async {
     final query = {'page': '$page', ...?filters};
     final response = await client.get(
       RestClientRequest(path: '/episode', queryParameters: query),
@@ -33,7 +40,10 @@ class RamRemoteDatasource {
     return Map<String, dynamic>.from(response.data);
   }
 
-  Future<List<Map<String, dynamic>>> getLocations({int page = 1, Map<String, String>? filters}) async {
+  Future<List<Map<String, dynamic>>> getLocations({
+    int page = 1,
+    Map<String, String>? filters,
+  }) async {
     final query = {'page': '$page', ...?filters};
     final response = await client.get(
       RestClientRequest(path: '/location', queryParameters: query),
