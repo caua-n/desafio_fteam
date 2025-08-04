@@ -16,8 +16,8 @@ class RestClientDioImpl implements IRestClient {
   final Dio _dio;
 
   final Map<IRestInterceptor, Interceptor> _interceptors = {};
-
-  RestClientDioImpl({required Dio dio}) : _dio = dio;
+  
+  RestClientDioImpl({required Dio dio}): _dio = dio;
 
   @override
   void addInterceptor(IRestInterceptor interceptor) {
