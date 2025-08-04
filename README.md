@@ -63,26 +63,24 @@ https://github.com/user-attachments/assets/a76b47f3-f9ec-4b49-82a1-4deba46f3469
 1. Clone este repositório:
 
    ```bash
+   git clone [https://github.com/caua-n/rick-and-morty-explorer.git](https://github.com/seu-usuario/rick-and-morty-explorer.git)
+   cd rick-and-morty-explorer
    ```
 
-git clone [https://github.com/caua-n/rick-and-morty-explorer.git](https://github.com/seu-usuario/rick-and-morty-explorer.git)
-cd rick-and-morty-explorer
 
-````
 
 2. Instale as dependências:
    ```bash
-flutter pub get
-````
+   flutter pub get
+   ```
 
 API\_BASE\_URL=[https://rickandmortyapi.com/api](https://rickandmortyapi.com/api)
 
-````
 
 3. Execute o app em um dispositivo ou emulador:
    ```bash
-flutter run
-````
+   flutter run
+   ```
 
 ## 🌟 Contribuições
 
