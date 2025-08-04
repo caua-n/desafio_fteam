@@ -8,8 +8,6 @@ import 'package:desafio_fteam/core/clients/rest/models/rest_client_request.dart'
 import 'package:desafio_fteam/core/clients/rest/models/rest_client_response.dart';
 import 'package:dio/dio.dart';
 
-// Remova a classe DioFactory inteira.
-
 class RestClientDioImpl implements IRestClient {
   final Dio _dio;
 
@@ -102,8 +100,6 @@ class RestClientDioImpl implements IRestClient {
 
   @override
   Future<RestClientResponse> post(RestClientRequest request) async {
-    // Remova o bloco if/else e o try/finally.
-    // A baseUrl já estará configurada na instância _dio.
     try {
       final response = await _dio.post(
         request.path,

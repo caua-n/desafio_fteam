@@ -54,7 +54,6 @@ class _HomeViewState extends State<HomeView> {
       }
     });
 
-    // Infinite scroll de LOCALIZAÇÕES
     _locationScrollController.addListener(() {
       final locVM = context.read<LocationListViewModel>();
       if (_locationScrollController.position.pixels >=
@@ -246,7 +245,7 @@ class _HomeViewState extends State<HomeView> {
                 _searchController.text.isEmpty)
               SliverToBoxAdapter(
                 child: const Padding(
-                  padding: EdgeInsets.only(left:16.0, top: 16.0),
+                  padding: EdgeInsets.only(left: 16.0, top: 16.0),
                   child: Text(
                     'Personagens',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
