@@ -49,7 +49,7 @@ class CharacterDetailView extends StatelessWidget {
                     'Origem: ${viewModel.character!.origin.name}',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
                   ),
-                  Flexible(child: Image.asset('assets/gifs/portal.gif'))
+                  Flexible(child: Image.asset('assets/gifs/portal.gif')),
                 ],
               ),
             ),

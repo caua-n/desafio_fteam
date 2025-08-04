@@ -179,7 +179,7 @@ class _HomeViewState extends State<HomeView> {
                                   episode.episode,
                                   style: TextStyle(color: Color(0xff24325f)),
                                 ),
-                                SizedBox(height: 8,),
+                                SizedBox(height: 8),
                                 Row(
                                   children: [
                                     Icon(
@@ -187,7 +187,7 @@ class _HomeViewState extends State<HomeView> {
                                       size: 16,
                                       color: Color(0xff24325f),
                                     ),
-                                    SizedBox(width: 4,),
+                                    SizedBox(width: 4),
                                     Text(
                                       episode.airDate,
                                       style: TextStyle(
@@ -248,7 +248,7 @@ class _HomeViewState extends State<HomeView> {
                                   location.type,
                                   style: TextStyle(color: Color(0xff24325f)),
                                 ),
-                                 SizedBox(height: 8,),
+                                SizedBox(height: 8),
                                 Row(
                                   children: [
                                     Icon(
@@ -256,7 +256,7 @@ class _HomeViewState extends State<HomeView> {
                                       size: 16,
                                       color: Color(0xff24325f),
                                     ),
-                                    SizedBox(width: 4,),
+                                    SizedBox(width: 4),
                                     Text(
                                       location.dimension,
                                       style: TextStyle(
