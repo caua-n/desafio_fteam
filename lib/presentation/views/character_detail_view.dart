@@ -27,15 +27,29 @@ class CharacterDetailView extends StatelessWidget {
                       width: 150,
                     ),
                   ),
+                  const SizedBox(height: 8),
                   Text(
                     viewModel.character!.name,
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  Text('Status: ${viewModel.character!.status.name}'),
-                  Text('Espécie: ${viewModel.character!.species.name}'),
-                  Text('Gênero: ${viewModel.character!.gender.name}'),
-                  Text('Origem: ${viewModel.character!.origin.name}'),
+                  Text(
+                    'Status: ${viewModel.character!.status.name}',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+                  ),
+                  Text(
+                    'Espécie: ${viewModel.character!.species.name}',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+                  ),
+                  Text(
+                    'Gênero: ${viewModel.character!.gender.name}',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+                  ),
+                  Text(
+                    'Origem: ${viewModel.character!.origin.name}',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+                  ),
+                  Flexible(child: Image.asset('assets/gifs/portal.gif'))
                 ],
               ),
             ),

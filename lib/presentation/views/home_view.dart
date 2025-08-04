@@ -153,7 +153,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   SizedBox(
-                    height: 80,
+                    height: 100,
                     child: ListView.builder(
                       controller: _episodeScrollController,
                       scrollDirection: Axis.horizontal,
@@ -178,6 +178,23 @@ class _HomeViewState extends State<HomeView> {
                                 Text(
                                   episode.episode,
                                   style: TextStyle(color: Color(0xff24325f)),
+                                ),
+                                SizedBox(height: 8,),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.date_range,
+                                      size: 16,
+                                      color: Color(0xff24325f),
+                                    ),
+                                    SizedBox(width: 4,),
+                                    Text(
+                                      episode.airDate,
+                                      style: TextStyle(
+                                        color: Color(0xff24325f),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -204,7 +221,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   SizedBox(
-                    height: 80,
+                    height: 100,
                     child: ListView.builder(
                       controller: _locationScrollController,
                       scrollDirection: Axis.horizontal,
@@ -230,6 +247,23 @@ class _HomeViewState extends State<HomeView> {
                                 Text(
                                   location.type,
                                   style: TextStyle(color: Color(0xff24325f)),
+                                ),
+                                 SizedBox(height: 8,),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.place_rounded,
+                                      size: 16,
+                                      color: Color(0xff24325f),
+                                    ),
+                                    SizedBox(width: 4,),
+                                    Text(
+                                      location.dimension,
+                                      style: TextStyle(
+                                        color: Color(0xff24325f),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
