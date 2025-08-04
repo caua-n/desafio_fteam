@@ -2,46 +2,42 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/entities/character_entity.dart';
 import '../../../domain/usecases/get_characters_usecase.dart';
-
 class CharacterListViewModel extends ChangeNotifier {
-  final GetCharactersUseCase _getCharactersUseCase;
+  final GetCharactersUseCase getCharactersUseCase;
 
-  CharacterListViewModel(this._getCharactersUseCase);
+  CharacterListViewModel({required this.getCharactersUseCase});
 
   List<CharacterEntity> _characters = [];
   List<CharacterEntity> get characters => _characters;
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
   int _page = 1;
+  bool _isLoading = false;
   bool _hasMore = true;
 
   Future<void> loadCharacters({bool loadMore = false, String? query}) async {
-  if (_isLoading || (!_hasMore && loadMore)) return;
+    if (_isLoading || (!_hasMore && loadMore)) return;
 
-  _isLoading = true;
-  notifyListeners();
+    _isLoading = true;
+    notifyListeners();
 
-  try {
-    final newCharacters = await _getCharactersUseCase(
-      page: _page,
-      filters: query != null ? {'name': query} : null,
-    );
-    if (loadMore) {
-      _characters.addAll(newCharacters);
-    } else {
-      _characters = newCharacters;
-    }
-    if (newCharacters.isEmpty) {
-      _hasMore = false;
-    } else {
-      _page++;
-    }
-  } catch (_) {}
+    try {
+      final newCharacters = await getCharactersUseCase(
+        page: _page,
+        filters: query != null ? {'name': query} : null,
+      );
+      if (loadMore) {
+        _characters.addAll(newCharacters);
+      } else {
+        _characters = newCharacters;
+      }
+      if (newCharacters.isEmpty) {
+        _hasMore = false;
+      } else {
+        _page++;
+      }
+    } catch (_) {}
 
-  _isLoading = false;
-  notifyListeners();
-}
-
+    _isLoading = false;
+    notifyListeners();
+  }
 }

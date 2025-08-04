@@ -39,7 +39,7 @@ Icon?
 build/
 .android/
 .ios/
-/env/
+*.env
 .flutter-plugins
 .flutter-plugins-dependencies
 

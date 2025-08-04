@@ -1,7 +1,5 @@
 import 'package:desafio_fteam/core/clients/rest/client/rest_client_dio_impl.dart';
-import 'package:desafio_fteam/core/clients/rest/constants/dio_constants.dart';
 import 'package:desafio_fteam/core/clients/rest/i_rest_client.dart';
-import 'package:desafio_fteam/core/resources/settings.dart';
 import 'package:desafio_fteam/domain/usecases/get_locations_by_id_usecase.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -17,16 +15,16 @@ import '../../../domain/usecases/get_locations_usecase.dart';
 
 final getIt = GetIt.instance;
 
-void setupDependencies(Settings settings) {
+void setupDependencies() {
   // Clients
   getIt.registerLazySingleton<Dio>(
       () => Dio(
         BaseOptions(
-          baseUrl: settings.ramApiUrl,
+          baseUrl: 'https://rickandmortyapi.com/api',
           connectTimeout:
-              Duration(milliseconds: DioConstants.connectTimeout),
+              Duration(milliseconds: 30000),
           receiveTimeout:
-              Duration(milliseconds: DioConstants.receiveTimeout),
+              Duration(milliseconds: 30000),
         ),
       ),
     );

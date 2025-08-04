@@ -12,67 +12,48 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  late final ScrollController _scrollController;
-
   @override
   void initState() {
     super.initState();
-    final vm = context.read<CharacterListViewModel>();
-    vm.loadCharacters();
-    _scrollController = ScrollController()
-      ..addListener(() {
-        if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 200) {
-          vm.loadCharacters(loadMore: true);
-        }
-      });
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
+    Future.microtask(() {
+      context.read<CharacterListViewModel>().loadCharacters();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<CharacterListViewModel>();
+    final viewModel = context.watch<CharacterListViewModel>();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Rick and Morty'),
+        title: const Text('Personagens'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // TODO: Implementar tela de busca futuramente
+            onPressed: () async {
+              final query = await context.push<String>('/search');
+              if (query != null) {
+                context.read<CharacterListViewModel>().loadCharacters(query: query);
+              }
             },
+            icon: const Icon(Icons.search),
           )
         ],
       ),
       body: CustomScrollView(
-        controller: _scrollController,
         slivers: [
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                if (index >= vm.characters.length) {
-                  return vm.isLoading
-                      ? const Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Center(child: CircularProgressIndicator()),
-                        )
-                      : null;
-                }
-                final character = vm.characters[index];
+                final character = viewModel.characters[index];
                 return ListTile(
-                  leading: CircleAvatar(backgroundImage: NetworkImage(character.image)),
                   title: Text(character.name),
                   subtitle: Text(character.status.name),
-                  onTap: () => context.push('/character/${character.id}'),
+                  onTap: () {
+                    context.push('/character/${character.id}');
+                  },
                 );
               },
-              childCount: vm.characters.length + (vm.isLoading ? 1 : 0),
+              childCount: viewModel.characters.length,
             ),
           ),
         ],

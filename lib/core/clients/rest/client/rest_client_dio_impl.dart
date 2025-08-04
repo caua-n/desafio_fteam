@@ -1,6 +1,5 @@
 // rest_client_dio_impl.dart
 import 'package:desafio_fteam/core/clients/rest/constants/dio_adapter.dart';
-import 'package:desafio_fteam/core/clients/rest/constants/dio_constants.dart';
 import 'package:desafio_fteam/core/clients/rest/i_rest_client.dart';
 import 'package:desafio_fteam/core/clients/rest/i_rest_interceptor.dart';
 import 'package:desafio_fteam/core/clients/rest/interceptors/rest_interceptor_impl.dart';
@@ -41,9 +40,9 @@ class RestClientDioImpl implements IRestClient {
     });
     
     final baseOptions = BaseOptions(
-      baseUrl: DioConstants.baseUrl, //
-      connectTimeout: Duration(milliseconds: DioConstants.connectTimeout), //
-      receiveTimeout: Duration(milliseconds: DioConstants.receiveTimeout), //
+      baseUrl: 'https://rickandmortyapi.com/api', //
+      connectTimeout: Duration(milliseconds: 30000), //
+      receiveTimeout: Duration(milliseconds:30000), //
     );
 
     Dio dio = Dio(baseOptions); //

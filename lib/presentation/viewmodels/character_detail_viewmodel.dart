@@ -1,13 +1,12 @@
+import 'package:desafio_fteam/domain/entities/character_entity.dart';
+import 'package:desafio_fteam/domain/usecases/get_character_by_id_usecase.dart';
 import 'package:flutter/material.dart';
 
-import '../../../domain/entities/character_entity.dart';
-import '../../../domain/usecases/get_character_by_id_usecase.dart';
-
 class CharacterDetailViewModel extends ChangeNotifier {
-  final GetCharacterByIdUseCase _getCharacterByIdUseCase;
+  final GetCharacterByIdUseCase getCharacterByIdUseCase;
   final int characterId;
 
-  CharacterDetailViewModel(this._getCharacterByIdUseCase, this.characterId);
+  CharacterDetailViewModel(this.getCharacterByIdUseCase, this.characterId);
 
   CharacterEntity? _character;
   CharacterEntity? get character => _character;
@@ -20,8 +19,10 @@ class CharacterDetailViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _character = await _getCharacterByIdUseCase(characterId);
-    } catch (_) {}
+      _character = await getCharacterByIdUseCase(characterId);
+    } catch (_) {
+      _character = null;
+    }
 
     _isLoading = false;
     notifyListeners();
