@@ -20,10 +20,16 @@ class CharacterDetailView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.network(viewModel.character!.image),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(150),
+                    child: Image.network(
+                      viewModel.character!.image,
+                      width: 150,
+                    ),
+                  ),
                   Text(
                     viewModel.character!.name,
-                    style: Theme.of(context).textTheme.headlineMedium,
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text('Status: ${viewModel.character!.status.name}'),

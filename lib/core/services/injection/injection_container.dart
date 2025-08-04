@@ -1,6 +1,9 @@
 import 'package:desafio_fteam/core/clients/rest/client/rest_client_dio_impl.dart';
 import 'package:desafio_fteam/core/clients/rest/i_rest_client.dart';
 import 'package:desafio_fteam/domain/usecases/get_locations_by_id_usecase.dart';
+import 'package:desafio_fteam/presentation/viewmodels/character_list_viewmodel.dart';
+import 'package:desafio_fteam/presentation/viewmodels/episode_list_viewmodel.dart';
+import 'package:desafio_fteam/presentation/viewmodels/location_list_viewmodel.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -43,4 +46,9 @@ void setupDependencies() {
   getIt.registerLazySingleton(() => GetEpisodeByIdUseCase(getIt()));
   getIt.registerLazySingleton(() => GetLocationsUseCase(getIt()));
   getIt.registerLazySingleton(() => GetLocationByIdUseCase(getIt()));
+
+  // ViewModels
+  getIt.registerFactory<CharacterListViewModel>(() => getIt());
+  getIt.registerFactory<EpisodeListViewModel>(() => getIt());
+  getIt.registerFactory<LocationListViewModel>(() => getIt());
 }

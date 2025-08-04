@@ -1,5 +1,9 @@
+import 'package:desafio_fteam/domain/entities/episode_entity.dart';
+import 'package:desafio_fteam/domain/entities/location_entity.dart';
 import 'package:desafio_fteam/domain/enums/character_status_enum.dart';
 import 'package:desafio_fteam/presentation/viewmodels/character_list_viewmodel.dart';
+import 'package:desafio_fteam/presentation/viewmodels/episode_list_viewmodel.dart';
+import 'package:desafio_fteam/presentation/viewmodels/location_list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -13,24 +17,60 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final _searchController = TextEditingController();
+  final ScrollController _characterScrollController = ScrollController();
+  final ScrollController _episodeScrollController = ScrollController();
+  final ScrollController _locationScrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    Future.microtask(() {
+      context.read<CharacterListViewModel>().loadCharacters();
+      context.read<EpisodeListViewModel>().loadEpisodes();
+      context.read<LocationListViewModel>().loadLocations();
+    });
+    final viewModel = context.read<CharacterListViewModel>();
+
     _searchController.addListener(() {
       if (_searchController.text.isEmpty) {
-        context.read<CharacterListViewModel>().loadCharacters();
+        viewModel.loadCharacters();
       }
     });
 
-    Future.microtask(() {
-      context.read<CharacterListViewModel>().loadCharacters();
+    _characterScrollController.addListener(() {
+      if (_characterScrollController.position.pixels >=
+              _characterScrollController.position.maxScrollExtent - 300 &&
+          viewModel.hasMore) {
+        viewModel.loadCharacters(loadMore: true);
+      }
+    });
+
+    _episodeScrollController.addListener(() {
+      final epVM = context.read<EpisodeListViewModel>();
+      if (_episodeScrollController.position.pixels >=
+              _episodeScrollController.position.maxScrollExtent - 300 &&
+          epVM.hasMore) {
+        epVM.loadEpisodes(loadMore: true);
+      }
+    });
+
+    // Infinite scroll de LOCALIZAÇÕES
+    _locationScrollController.addListener(() {
+      final locVM = context.read<LocationListViewModel>();
+      if (_locationScrollController.position.pixels >=
+              _locationScrollController.position.maxScrollExtent - 300 &&
+          locVM.hasMore) {
+        locVM.loadLocations(loadMore: true);
+      }
     });
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _characterScrollController.dispose();
+    _episodeScrollController.dispose();
+    _locationScrollController.dispose();
     super.dispose();
   }
 
@@ -40,10 +80,12 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<CharacterListViewModel>();
+    final characterVM = context.watch<CharacterListViewModel>();
+    final episodeVM = context.watch<EpisodeListViewModel>();
+    final locationVM = context.watch<LocationListViewModel>();
 
     return GestureDetector(
-      behavior: HitTestBehavior.translucent,
+      behavior: HitTestBehavior.deferToChild,
       onTap: () {
         final currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus &&
@@ -52,90 +94,251 @@ class _HomeViewState extends State<HomeView> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Personagens'),
-          leading: const CircleAvatar(
-            backgroundImage: NetworkImage(
-              'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-            ),
-          ),
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: TextField(
-                controller: _searchController,
-                onSubmitted: _onSearch,
-                decoration: InputDecoration(
-                  hintText: 'Buscar personagem...',
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      _searchController.clear();
-                      _onSearch('');
-                      FocusScope.of(context).unfocus();
-                    },
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+        body: CustomScrollView(
+          controller: _characterScrollController,
+          slivers: [
+            SliverAppBar(
+              floating: true,
+              pinned: true,
+              snap: true,
+              shadowColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              expandedHeight: 200.0,
+              toolbarHeight: 80.0,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Image.asset('assets/images/logo.png'),
+                ),
+              ),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(80),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  child: TextField(
+                    controller: _searchController,
+                    onSubmitted: _onSearch,
+                    decoration: InputDecoration(
+                      hintText: 'Buscar personagem...',
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: _searchController.text.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                _searchController.clear();
+                                _onSearch('');
+                                FocusScope.of(context).unfocus();
+                              },
+                            )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-            Expanded(
-              child: Builder(
-                builder: (context) {
-                  if (viewModel.characters.isEmpty &&
-                      _searchController.text.isNotEmpty) {
-                    return const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text(
-                          '🛸 Nenhum personagem encontrado!\nMorty provavelmente apertou o botão errado de novo...',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 16),
-                        ),
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      'Episódios',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                    );
-                  }
-
-                  return CustomScrollView(
-                    slivers: [
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          final character = viewModel.characters[index];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: NetworkImage(character.image),
-                            ),
-                            title: Text(character.name),
-                            subtitle: Row(
+                    ),
+                  ),
+                  SizedBox(
+                    height: 80,
+                    child: ListView.builder(
+                      controller: _episodeScrollController,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: episodeVM.episodes.length,
+                      itemBuilder: (context, index) {
+                        final EpisodeEntity episode = episodeVM.episodes[index];
+                        return Card(
+                          color: Colors.lightGreen.shade100,
+                          margin: const EdgeInsets.only(left: 16),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  margin: const EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: _getStatusColor(character.status),
-                                    shape: BoxShape.circle,
+                                Text(
+                                  episode.name,
+                                  style: TextStyle(
+                                    color: Color(0xff24325f),
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text(_getStatusLabel(character.status)),
+                                Text(
+                                  episode.episode,
+                                  style: TextStyle(color: Color(0xff24325f)),
+                                ),
                               ],
                             ),
-                            onTap: () {
-                              context.push('/character/${character.id}');
-                            },
-                          );
-                        }, childCount: viewModel.characters.length),
-                      ),
-                    ],
-                  );
-                },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      'Localizações',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 80,
+                    child: ListView.builder(
+                      controller: _locationScrollController,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: locationVM.locations.length,
+                      itemBuilder: (context, index) {
+                        final LocationEntity location =
+                            locationVM.locations[index];
+                        return Card(
+                          color: Colors.lightGreen.shade300,
+                          margin: const EdgeInsets.only(left: 16),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  location.name,
+                                  style: TextStyle(
+                                    color: Color(0xff24325f),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  location.type,
+                                  style: TextStyle(color: Color(0xff24325f)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (characterVM.characters.isNotEmpty &&
+                _searchController.text.isEmpty)
+              SliverToBoxAdapter(
+                child: const Padding(
+                  padding: EdgeInsets.only(left:16.0, top: 16.0),
+                  child: Text(
+                    'Personagens',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            if (characterVM.characters.isEmpty &&
+                _searchController.text.isNotEmpty)
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Nenhum personagem encontrado!',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(48.0),
+                          child: Image.asset(
+                            'assets/gifs/rickandmortypixel.gif',
+                            filterQuality: FilterQuality.none,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            else
+              SliverPadding(
+                padding: EdgeInsets.all(16.0),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final character = characterVM.characters[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: ListTile(
+                        tileColor: Colors.lightGreen.shade500,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Container(
+                            color: Color.fromARGB(255, 0, 78, 0),
+                            padding: const EdgeInsets.all(3.0),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(character.image),
+                            ),
+                          ),
+                        ),
+                        title: Text(
+                          character.name,
+                          style: TextStyle(
+                            color: Color(0xff24325f),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        subtitle: Row(
+                          children: [
+                            Container(
+                              width: 10,
+                              height: 10,
+                              margin: const EdgeInsets.only(right: 8),
+                              decoration: BoxDecoration(
+                                color: _getStatusColor(character.status),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            Text(
+                              _getStatusLabel(character.status),
+                              style: TextStyle(color: Color(0xff24325f)),
+                            ),
+                          ],
+                        ),
+                        trailing: Icon(
+                          Icons.info_outline,
+                          color: Color(0xff24325f),
+                        ),
+                        onTap: () {
+                          context.push('/character/${character.id}');
+                        },
+                      ),
+                    );
+                  }, childCount: characterVM.characters.length),
+                ),
+              ),
           ],
         ),
       ),
@@ -174,11 +377,11 @@ String _getRandomUnknownLabel() {
 Color _getStatusColor(CharacterStatus status) {
   switch (status) {
     case CharacterStatus.alive:
-      return Colors.green;
+      return Color.fromARGB(255, 17, 4, 104);
     case CharacterStatus.dead:
-      return Colors.red;
+      return const Color.fromARGB(255, 207, 57, 2);
     case CharacterStatus.unknown:
     default:
-      return Colors.grey;
+      return const Color.fromARGB(255, 74, 74, 74);
   }
 }
