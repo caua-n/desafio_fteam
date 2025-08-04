@@ -27,14 +27,15 @@ get_it: ^8.2.0
 provider: ^6.1.5
 ```
 
-## 🏗 Arquitetura do Projeto
+## 🏗 Arquitetura do Projeto MVVM com principios e boas praticas de Clean Arch
 
 ```
 lib/
 ├── main.dart                # Entry point do app
+├── app_widget.dart          # Configuração
 ├── core/
-│   ├── di/                  # Configuração de injeção de dependência (get_it)
-│   ├── network/             # Cliente HTTP (Dio)
+│   ├── services/injector    # Configuração de injeção de dependência (get_it)
+│   ├── clients/             # Cliente HTTP (Dio)
 │   └── routes/              # Definição das rotas (go_router)
 ├── data/
 │   ├── datasources/         # RamRemoteDatasource (implementação do acesso à API)
